@@ -1,0 +1,17 @@
+# Env files (per-app .env.example files are tracked instead)
+backend/.env
+frontend/.env
+
+# Python
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+backend/staticfiles/
+backend/.venv/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# OS
+.DS_Store
