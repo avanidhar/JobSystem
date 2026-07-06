@@ -10,6 +10,18 @@ Django + PostgreSQL backend, React + TypeScript frontend, each running in its ow
 
 ## Running locally
 
+A `Makefile` wraps the common commands:
+
+| Target | Does |
+|---|---|
+| `make build` | Builds the `backend`/`frontend` images (`docker compose build`) |
+| `make up` | Starts `db`, `backend`, `frontend` in the background |
+| `make test` | Ensures the app is up, then runs the Playwright e2e suite |
+| `make stop` | Stops containers, but keeps them + volumes for a quick restart |
+| `make clean` | Full wipe: removes containers, the network, **and the Postgres volume** |
+
+Or run the underlying commands directly:
+
 ```bash
 docker compose up --build
 ```
@@ -26,6 +38,17 @@ docker compose exec backend python manage.py createsuperuser
 ```
 
 Both `backend/` and `frontend/` are mounted as volumes, so code changes hot-reload without rebuilding the image.
+
+To generate some dummy data to look at in the UI:
+
+```bash
+docker compose exec backend python manage.py seed_jobs
+```
+
+Replaces all jobs with a fixed set of 15 dummy jobs (see
+`backend/jobs/management/commands/seed_jobs.py`), each walking through a
+realistic status history rather than just a final status, spread across all
+four statuses (Pending/Running/Succeeded/Failed) for exercising the UI.
 
 ## Running backend tests
 

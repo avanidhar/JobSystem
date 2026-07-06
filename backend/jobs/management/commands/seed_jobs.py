@@ -14,6 +14,11 @@ JOB_DEFINITIONS = [
     ("Thumbnail Generation Batch", ["PENDING", "RUNNING", "SUCCEEDED"]),
     ("Fraud Detection Scan", ["PENDING", "RUNNING", "FAILED"]),
     ("Weekly Newsletter Dispatch", ["PENDING"]),
+    ("Log Rotation Job", ["PENDING", "RUNNING", "SUCCEEDED"]),
+    ("Search Index Rebuild", ["PENDING", "RUNNING"]),
+    ("Payment Reconciliation", ["PENDING", "RUNNING", "FAILED"]),
+    ("Customer Export Job", ["PENDING"]),
+    ("SSL Certificate Renewal", ["PENDING", "RUNNING", "SUCCEEDED"]),
 ]
 
 
