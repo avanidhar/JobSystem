@@ -2,8 +2,11 @@
 Django settings for config project.
 """
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
+
+RUNNING_TESTS = "test" in sys.argv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -65,16 +68,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB", "jobsystem"),
-        "USER": os.environ.get("POSTGRES_USER", "jobsystem"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "jobsystem"),
-        "HOST": os.environ.get("POSTGRES_HOST", "db"),
-        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+if RUNNING_TESTS:
+    # Unit tests run against an in-memory SQLite DB instead of Postgres, so
+    # `manage.py test` doesn't require a running `db` container and runs in
+    # milliseconds. Nothing in these models relies on Postgres-specific
+    # behavior, so this stays a faithful stand-in for the ORM/query layer.
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("POSTGRES_DB", "jobsystem"),
+            "USER": os.environ.get("POSTGRES_USER", "jobsystem"),
+            "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "jobsystem"),
+            "HOST": os.environ.get("POSTGRES_HOST", "db"),
+            "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
