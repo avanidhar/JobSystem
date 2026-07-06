@@ -1,0 +1,58 @@
+.job-row-actions {
+  position: relative;
+  display: inline-block;
+}
+
+.job-row-actions__trigger {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.25rem 0.6rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.job-row-actions__trigger:hover {
+  background: var(--surface-page);
+  border-color: var(--border-hairline);
+}
+
+.job-row-actions__menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  min-width: 120px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(11, 11, 11, 0.15);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.job-row-actions__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.job-row-actions__item:hover {
+  background: var(--surface-page);
+}
+
+/* No direct --status-critical text color here: at 3.62:1 on the dark
+   surface it fails AA for body text (that palette is for dots/icons/
+   solid backgrounds, not text). A tinted hover is the danger cue instead;
+   the actual destructive action gets a solid critical button in the
+   confirm dialog, where white-on-critical passes contrast easily. */
+.job-row-actions__item--destructive:hover {
+  background: rgba(208, 59, 59, 0.12);
+}

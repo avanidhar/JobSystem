@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { JobsList } from "./components/JobsList";
+import { JobsPage } from "./components/JobsPage";
 
 import "./App.css";
 
@@ -22,7 +22,7 @@ function App() {
         <h1>JobSystem</h1>
         <span className="app__api-status">API: {apiStatus}</span>
       </header>
-      <JobsList />
+      <JobsPage />
     </div>
   );
 }

@@ -28,3 +28,16 @@
   color: var(--text-primary);
   font-weight: 600;
 }
+
+.jobs-list__created-at {
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.jobs-list__actions-header {
+  width: 2.5rem;
+}
+
+.jobs-list__actions-cell {
+  text-align: right;
+}

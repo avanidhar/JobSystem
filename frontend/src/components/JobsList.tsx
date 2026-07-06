@@ -1,37 +1,25 @@
-import { useEffect, useState } from "react";
-
-import { fetchJobs } from "../api/jobs";
 import type { Job } from "../types";
+import { formatDateTime } from "../utils/formatDate";
+import { JobRowActions } from "./JobRowActions";
 import { StatusBadge } from "./StatusBadge";
 
 import "./JobsList.css";
 
-export function JobsList() {
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface JobsListProps {
+  jobs: Job[];
+  loading: boolean;
+  error: string | null;
+  onRequestUpdate: (job: Job) => void;
+  onRequestDelete: (job: Job) => void;
+}
 
-  useEffect(() => {
-    let cancelled = false;
-
-    fetchJobs()
-      .then((data) => {
-        if (!cancelled) setJobs(data);
-      })
-      .catch((err: unknown) => {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to load jobs");
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
+export function JobsList({
+  jobs,
+  loading,
+  error,
+  onRequestUpdate,
+  onRequestDelete,
+}: JobsListProps) {
   if (loading) {
     return <p className="jobs-list__message">Loading jobs…</p>;
   }
@@ -49,19 +37,28 @@ export function JobsList() {
       <thead>
         <tr>
           <th>Name</th>
+          <th>Created At</th>
           <th>Status</th>
+          <th className="jobs-list__actions-header" aria-label="Actions" />
         </tr>
       </thead>
       <tbody>
         {jobs.map((job) => (
           <tr key={job.id}>
             <td>{job.name}</td>
+            <td className="jobs-list__created-at">{formatDateTime(job.created_at)}</td>
             <td>
               {job.current_status ? (
                 <StatusBadge status={job.current_status.status_type} />
               ) : (
                 "—"
               )}
+            </td>
+            <td className="jobs-list__actions-cell">
+              <JobRowActions
+                onUpdate={() => onRequestUpdate(job)}
+                onDelete={() => onRequestDelete(job)}
+              />
             </td>
           </tr>
         ))}

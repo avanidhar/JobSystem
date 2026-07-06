@@ -13,3 +13,10 @@ export interface Job {
   updated_at: string;
   current_status: JobStatus | null;
 }
+
+export interface PaginatedJobs {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Job[];
+}

@@ -1,0 +1,20 @@
+.jobs-page__toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.jobs-page__create-button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--text-primary);
+  background: var(--text-primary);
+  color: var(--surface-page);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.jobs-page__create-button:hover {
+  opacity: 0.85;
+}

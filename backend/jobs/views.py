@@ -3,14 +3,17 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from .models import Job, JobStatus
+from .pagination import JobPagination
 from .serializers import JobSerializer, JobStatusUpdateSerializer
 
 
+# This is where the behavior implementation actually lives
 class JobViewSet(viewsets.ModelViewSet):
-    # PUT is intentionally excluded: jobs are only ever updated via PATCH
+    # PUT is intentionally excluded since jobs are only ever updated via PATCH
     # (append a new JobStatus), never fully replaced.
     http_method_names = ["get", "post", "patch", "delete", "head", "options"]
     serializer_class = JobSerializer
+    pagination_class = JobPagination
 
     def get_queryset(self):
         return Job.objects.prefetch_related(
@@ -39,4 +42,4 @@ class JobViewSet(viewsets.ModelViewSet):
         return Response(JobSerializer(fresh_job).data)
 
     # `destroy` is the default ModelViewSet behavior (instance.delete());
-    # JobStatus rows cascade-delete via the FK's on_delete=CASCADE.
+    # JobStatus rows cascade-delete via the Foreign Key's on_delete=CASCADE.

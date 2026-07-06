@@ -1,0 +1,48 @@
+.delete-job-modal__message {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.delete-job-modal__error {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin: 0.75rem 0 0;
+  padding-left: 0.5rem;
+  border-left: 3px solid var(--status-critical);
+}
+
+.delete-job-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.delete-job-modal__button {
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: 1px solid var(--border-hairline);
+}
+
+.delete-job-modal__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.delete-job-modal__button--secondary {
+  background: transparent;
+  color: var(--text-primary);
+}
+
+/* White-on-critical clears ~5.2:1 contrast, so the solid critical
+   background is safe here (unlike using the hue for text on a surface). */
+.delete-job-modal__button--danger {
+  background: var(--status-critical);
+  color: #ffffff;
+  border-color: var(--status-critical);
+}

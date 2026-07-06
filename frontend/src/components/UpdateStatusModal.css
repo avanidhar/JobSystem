@@ -1,0 +1,68 @@
+.update-status-modal__label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+
+.update-status-modal__job-name {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.update-status-modal__select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-hairline);
+  background: var(--surface-page);
+  color: var(--text-primary);
+}
+
+.update-status-modal__select:focus {
+  outline: 2px solid var(--status-warning);
+  outline-offset: 1px;
+}
+
+.update-status-modal__error {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin: 0.75rem 0 0;
+  padding-left: 0.5rem;
+  border-left: 3px solid var(--status-critical);
+}
+
+.update-status-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.update-status-modal__button {
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: 1px solid var(--border-hairline);
+}
+
+.update-status-modal__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.update-status-modal__button--secondary {
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.update-status-modal__button--primary {
+  background: var(--text-primary);
+  color: var(--surface-page);
+  border-color: var(--text-primary);
+}

@@ -1,0 +1,65 @@
+.create-job-modal__label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+
+.create-job-modal__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-hairline);
+  background: var(--surface-page);
+  color: var(--text-primary);
+}
+
+.create-job-modal__input:focus {
+  outline: 2px solid var(--status-warning);
+  outline-offset: 1px;
+}
+
+.create-job-modal__error {
+  /* --status-critical is reserved for dots/icons, not text: at 3.62:1 on
+     the dark surface it fails AA for body text, so error text stays in
+     a text token and only borrows a critical-colored left accent. */
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin: 0.5rem 0 0;
+  padding-left: 0.5rem;
+  border-left: 3px solid var(--status-critical);
+}
+
+.create-job-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.create-job-modal__button {
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: 1px solid var(--border-hairline);
+}
+
+.create-job-modal__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.create-job-modal__button--secondary {
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.create-job-modal__button--primary {
+  background: var(--text-primary);
+  color: var(--surface-page);
+  border-color: var(--text-primary);
+}
