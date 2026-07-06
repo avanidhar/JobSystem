@@ -10,7 +10,10 @@ test.describe("Create job", () => {
     const jobName = uniqueJobName("Create");
 
     await page.goto("/");
-    await expect(page.locator("table.jobs-list")).toBeVisible();
+    // Not table.jobs-list: with zero jobs (e.g. right after a fresh DB),
+    // JobsList intentionally renders a "No jobs yet." message instead of an
+    // empty table, but the create button is always present regardless.
+    await expect(page.locator(".jobs-page__create-button")).toBeVisible();
 
     await page.click(".jobs-page__create-button");
     await page.fill("#job-name", jobName);
