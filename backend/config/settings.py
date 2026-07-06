@@ -99,7 +99,8 @@ CORS_ALLOWED_ORIGINS = env_list(
 )
 
 REST_FRAMEWORK = {
+    # No auth system exists yet; revisit once one is added.
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+        "rest_framework.permissions.AllowAny",
     ],
 }

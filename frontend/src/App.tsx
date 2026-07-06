@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { JobsList } from "./components/JobsList";
+
 import "./App.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
@@ -16,8 +18,11 @@ function App() {
 
   return (
     <div className="app">
-      <h1>JobSystem</h1>
-      <p>Backend API status: {apiStatus}</p>
+      <header className="app__header">
+        <h1>JobSystem</h1>
+        <span className="app__api-status">API: {apiStatus}</span>
+      </header>
+      <JobsList />
     </div>
   );
 }

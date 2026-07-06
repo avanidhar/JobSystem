@@ -1,0 +1,43 @@
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid rgba(11, 11, 11, 0.1);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+@media (prefers-color-scheme: dark) {
+  .status-badge {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.status-badge__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Dot carries the color cue; the text label carries the meaning, so status
+   is never conveyed by color alone. */
+.status-badge--pending .status-badge__dot {
+  background-color: var(--status-neutral);
+}
+
+.status-badge--running .status-badge__dot {
+  background-color: var(--status-warning);
+}
+
+.status-badge--succeeded .status-badge__dot {
+  background-color: var(--status-good);
+}
+
+.status-badge--failed .status-badge__dot {
+  background-color: var(--status-critical);
+}

@@ -1,0 +1,30 @@
+.jobs-list {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+}
+
+.jobs-list th,
+.jobs-list td {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.jobs-list th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.jobs-list__message {
+  color: var(--text-secondary);
+  margin-top: 1.5rem;
+}
+
+.jobs-list__message--error {
+  color: var(--text-primary);
+  font-weight: 600;
+}
