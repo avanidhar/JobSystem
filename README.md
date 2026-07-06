@@ -74,6 +74,24 @@ Once set up, run individual files/classes/tests the usual Django way:
 python manage.py test jobs.tests.test_patch.JobPatchTests.test_patch_rejects_invalid_status_type -v 2
 ```
 
+## Running end-to-end tests
+
+```bash
+docker compose up -d                        # app must already be running
+docker compose --profile e2e run --rm e2e
+```
+
+Playwright specs live in `frontend/e2e/` (one file per user flow: create,
+update status, delete) and drive the real app in a headless browser against
+the real backend and Postgres — nothing is mocked. The `e2e` service only
+builds/runs when explicitly requested via `--profile e2e`; it's excluded from
+a plain `docker compose up`. It uses its own Dockerfile
+(`frontend/Dockerfile.e2e`, based on `mcr.microsoft.com/playwright`) since the
+main frontend image is Alpine-based and Playwright's bundled browsers don't
+support musl libc. Each spec creates its own uniquely-named job and cleans up
+after itself via direct API calls, so they don't collide with each other, with
+seeded demo data, or with each other across repeated runs.
+
 ## Known tradeoffs
 
 **Job list pagination is offset-based (`page`/`page_size`), not cursor-based.**
