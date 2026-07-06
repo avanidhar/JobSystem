@@ -1,6 +1,8 @@
 .jobs-page__toolbar {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   margin-top: 1.5rem;
 }
 

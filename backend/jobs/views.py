@@ -3,7 +3,6 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from .models import Job, JobStatus
-from .pagination import JobPagination
 from .serializers import JobSerializer, JobStatusUpdateSerializer
 
 
@@ -13,7 +12,6 @@ class JobViewSet(viewsets.ModelViewSet):
     # (append a new JobStatus), never fully replaced.
     http_method_names = ["get", "post", "patch", "delete", "head", "options"]
     serializer_class = JobSerializer
-    pagination_class = JobPagination
 
     def get_queryset(self):
         return Job.objects.prefetch_related(
@@ -24,6 +22,7 @@ class JobViewSet(viewsets.ModelViewSet):
             )
         )
 
+    # Overrides the create to set status to PENDING
     def perform_create(self, serializer):
         job = serializer.save()
         JobStatus.objects.create(job=job, status_type=JobStatus.StatusType.PENDING)

@@ -58,18 +58,19 @@ docker compose run --rm --no-deps backend python manage.py test jobs -v 2
 
 Tests run against an in-memory SQLite database (see `RUNNING_TESTS` in
 `backend/config/settings.py`), not Postgres, so no `db` container is needed —
-the full suite runs in well under a second. `--no-deps` matters here: without
+the full suite runs in well under a second. 
+Make sure you run with `--no-deps` here: without
 it, `docker compose run` still honors `depends_on` in `docker-compose.yml` and
-starts/waits on `db` anyway, even though the tests themselves no longer touch
+starts the `db`, even though the tests themselves no longer depend on it
 it.
 
 ### Running tests without Docker
 
 Since tests use SQLite rather than Postgres, they can also run in a plain
-local virtualenv — no containers at all. Django 5.0 requires **Python
+local virtualenv without requiring any containers. Django 5.0 requires **Python
 ≥3.10**; check `python3 --version` first, since some machines default to an
 older interpreter (e.g. via conda) even when a newer one is installed
-alongside it.
+alongside it. Then, you can run the tests in a virtual environment as shown below
 
 ```bash
 cd backend
@@ -97,7 +98,7 @@ Once set up, run individual files/classes/tests the usual Django way:
 python manage.py test jobs.tests.test_patch.JobPatchTests.test_patch_rejects_invalid_status_type -v 2
 ```
 
-## Running end-to-end tests
+## Running the playwright end-to-end tests
 
 ```bash
 docker compose up -d                        # app must already be running
@@ -115,8 +116,10 @@ support musl libc. Each spec creates its own uniquely-named job and cleans up
 after itself via direct API calls, so they don't collide with each other, with
 seeded demo data, or with each other across repeated runs.
 
-## Known tradeoffs
+## Known tradeoffs and performance considerations
 
+**Pagination as first step** I have added pagination support on the backend and frontend
+to scale the initial solution. 
 **Job list pagination is offset-based (`page`/`page_size`), not cursor-based.**
 `GET /api/jobs/` uses DRF's `PageNumberPagination` (`backend/jobs/pagination.py`):
 the server computes `LIMIT`/`OFFSET` fresh from `page` and `page_size` on every
@@ -135,3 +138,20 @@ anchored to the last row actually seen rather than a numeric offset.
 We're accepting this tradeoff for the current single-team-scale usage pattern.
 Revisit if/when this needs to support many concurrent users against a
 large, actively-changing job list.
+
+**Caching** We can do some creative caching to not fetch all data from the database
+if there have not been any updates to jobs and job statuses since the previous fetch. 
+This should reduce scan load on the db drastically
+
+**Job search (`?search=`) is a regex match (`name__iregex`), which cannot use
+a standard B-tree index.** `GET /api/jobs/?search=<pattern>` supports both
+plain substrings and real regex, but every search is a full table scan
+regardless of table size. Fine at hundreds/low-thousands of jobs; at larger
+scale this is a candidate for a Postgres trigram index
+(`pg_trgm` + `GIN`/`GiST`) if searches stay substring-like, or a dedicated
+search index (e.g. Postgres full-text search, or an external index like
+Elasticsearch) if regex flexibility needs to be preserved at scale. The
+frontend debounces input (300ms) before firing a request so typing itself
+never blocks on network latency and the server isn't hit on every keystroke,
+but that only reduces request *volume* — it doesn't change the per-request
+cost of an unindexed scan.

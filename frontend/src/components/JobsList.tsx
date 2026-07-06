@@ -9,6 +9,7 @@ interface JobsListProps {
   jobs: Job[];
   loading: boolean;
   error: string | null;
+  isSearchActive: boolean;
   onRequestUpdate: (job: Job) => void;
   onRequestDelete: (job: Job) => void;
 }
@@ -17,6 +18,7 @@ export function JobsList({
   jobs,
   loading,
   error,
+  isSearchActive,
   onRequestUpdate,
   onRequestDelete,
 }: JobsListProps) {
@@ -29,7 +31,11 @@ export function JobsList({
   }
 
   if (jobs.length === 0) {
-    return <p className="jobs-list__message">No jobs yet.</p>;
+    return (
+      <p className="jobs-list__message">
+        {isSearchActive ? "No jobs match your search." : "No jobs yet."}
+      </p>
+    );
   }
 
   return (

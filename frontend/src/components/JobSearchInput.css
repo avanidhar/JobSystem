@@ -1,0 +1,16 @@
+.job-search-input {
+  width: 100%;
+  max-width: 320px;
+  box-sizing: border-box;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-hairline);
+  background: var(--surface-card);
+  color: var(--text-primary);
+}
+
+.job-search-input:focus {
+  outline: 2px solid var(--status-warning);
+  outline-offset: 1px;
+}
