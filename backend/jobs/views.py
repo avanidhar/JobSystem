@@ -50,6 +50,7 @@ class JobViewSet(viewsets.ModelViewSet):
         job = serializer.save()
         JobStatus.objects.create(job=job, status_type=JobStatus.StatusType.PENDING)
 
+    # PATCH - add a new row with the latest status
     def partial_update(self, request, *args, **kwargs):
         job = self.get_object()
         serializer = JobStatusUpdateSerializer(data=request.data)

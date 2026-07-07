@@ -2,10 +2,17 @@
 
 Django + PostgreSQL backend, React + TypeScript frontend, each running in its own Docker container.
 
+## Time
+Wall clock - 3 days
+CPU time - roughly 2.5 hours
+
+## AI Use
+Session transcript can be found in the `session-transcript.txt` file in the repository
+
 ## Structure
 
-- `backend/` — Django REST API (see `backend/.env.example` for config)
-- `frontend/` — React + TypeScript app built with Vite (see `frontend/.env.example` for config)
+- `backend/` — Django REST API (see `backend/.env.example` for config). Unit tests are in `backend/jobs/tests`
+- `frontend/` — React + TypeScript app built with Vite (see `frontend/.env.example` for config). Playwright tests are in `frontend/e2e`
 - `docker-compose.yml` — wires up `db`, `backend`, and `frontend` services
 
 ## Running locally
@@ -59,10 +66,9 @@ docker compose run --rm --no-deps backend python manage.py test jobs -v 2
 Tests run against an in-memory SQLite database (see `RUNNING_TESTS` in
 `backend/config/settings.py`), not Postgres, so no `db` container is needed —
 the full suite runs in well under a second. 
-Make sure you run with `--no-deps` here: without
-it, `docker compose run` still honors `depends_on` in `docker-compose.yml` and
-starts the `db`, even though the tests themselves no longer depend on it
-it.
+Make sure you run with `--no-deps` here: without it, `docker compose run` still honors 
+`depends_on` in `docker-compose.yml` and starts the `db`, even though the tests themselves 
+no longer depend on it.
 
 ### Running tests without Docker
 
@@ -139,19 +145,22 @@ We're accepting this tradeoff for the current single-team-scale usage pattern.
 Revisit if/when this needs to support many concurrent users against a
 large, actively-changing job list.
 
-**Caching** We can do some creative caching to not fetch all data from the database
-if there have not been any updates to jobs and job statuses since the previous fetch. 
-This should reduce scan load on the db drastically
-
 **Job search (`?search=`) is a regex match (`name__iregex`), which cannot use
 a standard B-tree index.** `GET /api/jobs/?search=<pattern>` supports both
 plain substrings and real regex, but every search is a full table scan
 regardless of table size. Fine at hundreds/low-thousands of jobs; at larger
-scale this is a candidate for a Postgres trigram index
-(`pg_trgm` + `GIN`/`GiST`) if searches stay substring-like, or a dedicated
-search index (e.g. Postgres full-text search, or an external index like
-Elasticsearch) if regex flexibility needs to be preserved at scale. The
-frontend debounces input (300ms) before firing a request so typing itself
+scale this will need a proper index or a dedicated search service. 
+
+The frontend debounces input (300ms) before firing a request so typing itself
 never blocks on network latency and the server isn't hit on every keystroke,
 but that only reduces request *volume* — it doesn't change the per-request
 cost of an unindexed scan.
+
+## Future improvements 
+- A multi threaded web server with connection pooling
+- Cursor based pagination 
+- Add a composite index for faster retrieval + search support
+- Caching ( consider read-to-write ration, granularity of caching )
+- Rate limits, metrics, and observability
+- Read replicas to support higher read throughput. Caveat - Do we need to support read-after-write consistency?
+- etag support for consistency - noop if etag matches on retrieval, error if etag mismatches on write
