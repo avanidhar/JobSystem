@@ -157,10 +157,14 @@ but that only reduces request *volume* — it doesn't change the per-request
 cost of an unindexed scan.
 
 ## Future improvements 
-- A multi threaded web server with connection pooling
-- Cursor based pagination 
+- A multi threaded web server with connection pooling ( gunicorn )
+- Cursor based pagination as opposed to offset-based
 - Add a composite index for faster retrieval + search support
 - Caching ( consider read-to-write ration, granularity of caching )
 - Rate limits, metrics, and observability
 - Read replicas to support higher read throughput. Caveat - Do we need to support read-after-write consistency?
 - etag support for consistency - noop if etag matches on retrieval, error if etag mismatches on write
+- authn, authz support
+- State transition validation. Currently, the UI/API can set the job status to whatever value. In a real system, we would need certain well defined state transitions ( Succeeded to Running, for instance)
+- UX : Filter jobs by state. 
+- UX : Accessibility
